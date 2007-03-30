@@ -11,10 +11,11 @@ Group:		X11/Applications/Graphics
 Source0:	http://download.berlios.de/mirageiv/%{name}-%{version}.tar.bz2
 # Source0-md5:	a72f26fb2a60101816a50679729802e7
 URL:		http://mirageiv.berlios.de/
-BuildRequires:	gtk+2-devel >= 2.6.0
+BuildRequires:	gtk+2-devel >= 2:2.6.0
 BuildRequires:	python-devel
 BuildRequires:	python-gnome-devel
 BuildRequires:	python-pygtk-devel >= 2.6.0
+BuildRequires:	rpm-pythonprov
 Requires:	python-gnome
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -35,18 +36,18 @@ Features:
 
 %description -l pl.UTF-8
 Mirage to szybka i prosta przeglądarka obrazków w GTK+. Ponieważ
-zależy tylko od PyGTK, Mirage jest idealne dla użytkowników,
-którzy chcieliby utrzymać swój komputer odchudzony, a zarazem
-posiadać dobrą przeglądarkę obrazów.
+zależy tylko od PyGTK, Mirage jest idealne dla użytkowników, którzy
+chcieliby utrzymać swój komputer odchudzony, a zarazem posiadać dobrą
+przeglądarkę obrazów.
 
 Cechy:
 - Wspiera png, jpg, svg, xpm, gif, bmp, tiff i inne
 - Przeglądanie wielu obrazków (bez wcześniejszego ładowania)
 - Widok prezentacji i pełnoekranowy
-- Obracanie, przybliżanie, odwracanie, zmiania rozmiaru i przycinanie
+- Obracanie, przybliżanie, odwracanie, zmiana rozmiaru i przycinanie
 - Zachowywanie, kasowanie, zmiana nazwy
 - Akcje definiowane przez użytkownika
-- Dostęp z lini komend
+- Dostęp z linii poleceń
 - Konfigurowalny interfejs
 
 %prep
@@ -58,7 +59,10 @@ Cechy:
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__python} setup.py install --skip-build --root=$RPM_BUILD_ROOT
+%{__python} setup.py install \
+	--skip-build \
+	--optimize \
+	--root=$RPM_BUILD_ROOT
 
 %find_lang %{name}
 
@@ -69,8 +73,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc CHANGELOG README TODO TRANSLATORS
 %attr(755,root,root) %{_bindir}/mirage
-%{py_sitedir}/mirage.pyc
-%{py_sitedir}/imgfuncs.so
+%{py_sitedir}/mirage.py[co]
+%attr(755,root,root) %{py_sitedir}/imgfuncs.so
 %{py_sitedir}/*.egg-info
 %{_desktopdir}/mirage.desktop
 %dir %{_datadir}/mirage
