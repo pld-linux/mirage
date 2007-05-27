@@ -61,7 +61,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__python} setup.py install \
 	--skip-build \
-	--optimize \
+	--optimize=2 \
 	--root=$RPM_BUILD_ROOT
 
 %find_lang %{name}
