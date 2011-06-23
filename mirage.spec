@@ -1,22 +1,24 @@
 # TODO
 # - what python-pygtk it realy needs
 # - cleanup and ready to go!
+# - desktop integration (file association)
 Summary:	Fast and simple image viewer in GTK+
 Summary(pl.UTF-8):	Szybka i prosta przeglądarka obrazków w GTK+
 Name:		mirage
-Version:	0.9.3
+Version:	0.9.5.2
 Release:	1
 License:	GPL v3+
 Group:		X11/Applications/Graphics
 Source0:	http://download.berlios.de/mirageiv/%{name}-%{version}.tar.bz2
-# Source0-md5:	87bd8b8de578f34f4028073ecfa43474
+# Source0-md5:	92191a4496b0a50486ed7299baf6729f
 URL:		http://mirageiv.berlios.de/
 BuildRequires:	gtk+2-devel >= 2:2.6.0
-BuildRequires:	python-devel
+BuildRequires:	python-devel >= 1:2.5
 BuildRequires:	python-gnome-devel
-BuildRequires:	sed >= 4.0
 BuildRequires:	python-pygtk-devel >= 2.6.0
 BuildRequires:	rpm-pythonprov
+BuildRequires:	rpmbuild(macros) >= 1.219
+BuildRequires:	sed >= 4.0
 Requires:	python-gnome
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -61,13 +63,18 @@ Cechy:
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 %{__python} setup.py install \
+	--root=$RPM_BUILD_ROOT \
 	--skip-build \
-	--optimize=2 \
-	--root=$RPM_BUILD_ROOT
+	--optimize=2
+
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/%{name}/{CHANGELOG,COPYING,README,TODO,TRANSLATORS}
+
+# ukranian, seems not supported
+rm -r $RPM_BUILD_ROOT%{_datadir}/locale/ua
 
 %find_lang %{name}
+%py_postclean
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -78,6 +85,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/mirage
 %{py_sitedir}/mirage.py[co]
 %attr(755,root,root) %{py_sitedir}/imgfuncs.so
+%attr(755,root,root) %{py_sitedir}/xmouse.so
 %{py_sitedir}/*.egg-info
 %{_desktopdir}/mirage.desktop
 %dir %{_datadir}/mirage
