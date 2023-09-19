@@ -1,26 +1,30 @@
 # TODO
-# - what python-pygtk it realy needs
 # - cleanup and ready to go!
 # - desktop integration (file association)
 Summary:	Fast and simple image viewer in GTK+
 Summary(pl.UTF-8):	Szybka i prosta przeglądarka obrazków w GTK+
 Name:		mirage
 Version:	0.9.5.2
-Release:	2
+Release:	3
 License:	GPL v3+
 Group:		X11/Applications/Graphics
 Source0:	http://download.berlios.de/mirageiv/%{name}-%{version}.tar.bz2
 # Source0-md5:	92191a4496b0a50486ed7299baf6729f
+Patch0:		prevmouse-not-defined-with-click.patch
+Patch1:		glib241-init-workaround.patch
+Patch2:		py3-gtk3.patch
+Patch3:		pep632-distutils-port.patch
 URL:		http://mirageiv.berlios.de/
-BuildRequires:	gtk+2-devel >= 2:2.6.0
-BuildRequires:	python-devel >= 1:2.5
-BuildRequires:	python-gnome-devel
-BuildRequires:	python-pygtk-devel >= 2.6.0
+BuildRequires:	gtk+3-devel
+BuildRequires:	python3-devel
+BuildRequires:	python3-setuptools
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
 BuildRequires:	sed >= 4.0
+Requires:	gtk3
+Requires:	python3-gobject
+Requires:	python3-cairo
 Requires:	desktop-file-utils
-Requires:	python-gnome
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -56,26 +60,27 @@ Cechy:
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+
 # Don't remove rebuilt files!
 %{__sed} -i -e '/Cleanup/,$d' setup.py
 
 %build
-%{__python} setup.py build
+%py3_build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__python} setup.py install \
-	--root=$RPM_BUILD_ROOT \
-	--skip-build \
-	--optimize=2
+%py3_install
 
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/%{name}/{CHANGELOG,COPYING,README,TODO,TRANSLATORS}
 
 # ukranian, seems not supported
-rm -r $RPM_BUILD_ROOT%{_datadir}/locale/ua
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/locale/ua
 
 %find_lang %{name}
-%py_postclean
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -87,10 +92,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc CHANGELOG README TODO TRANSLATORS
 %attr(755,root,root) %{_bindir}/mirage
-%{py_sitedir}/mirage.py[co]
-%attr(755,root,root) %{py_sitedir}/imgfuncs.so
-%attr(755,root,root) %{py_sitedir}/xmouse.so
-%{py_sitedir}/*.egg-info
+%{py3_sitedir}/__pycache__/*.py*
+%{py3_sitedir}/mirage.py
+%attr(755,root,root) %{py3_sitedir}/imgfuncs.*.so
+%attr(755,root,root) %{py3_sitedir}/xmouse.*.so
+%{py3_sitedir}/*.egg-info
 %{_desktopdir}/mirage.desktop
 %dir %{_datadir}/mirage
 %{_datadir}/mirage/*.png

@@ -1,0 +1,11 @@
+--- mirage-0.9.5.2/setup.py.distutils	2020-09-10 00:15:48.360874985 +0900
++++ mirage-0.9.5.2/setup.py	2023-01-04 17:40:33.164918841 +0900
+@@ -5,7 +5,7 @@
+ 
+ import os
+ 
+-from distutils.core import setup, Extension
++from setuptools import setup, Extension
+ 
+ def removeall(path):
+ 	if not os.path.isdir(path):
