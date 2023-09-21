@@ -5,7 +5,7 @@ Summary:	Fast and simple image viewer in GTK+
 Summary(pl.UTF-8):	Szybka i prosta przeglądarka obrazków w GTK+
 Name:		mirage
 Version:	0.9.5.2
-Release:	3
+Release:	4
 License:	GPL v3+
 Group:		X11/Applications/Graphics
 Source0:	http://download.berlios.de/mirageiv/%{name}-%{version}.tar.bz2
@@ -21,9 +21,9 @@ BuildRequires:	python3-setuptools
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
 BuildRequires:	sed >= 4.0
-Requires:	gtk3
-Requires:	python3-gobject
-Requires:	python3-cairo
+Requires:	gtk+3
+Requires:	python3-pygobject3
+Requires:	python3-pycairo
 Requires:	desktop-file-utils
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
