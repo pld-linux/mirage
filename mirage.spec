@@ -5,7 +5,7 @@ Summary:	Fast and simple image viewer in GTK+
 Summary(pl.UTF-8):	Szybka i prosta przeglądarka obrazków w GTK+
 Name:		mirage
 Version:	0.9.5.2
-Release:	4
+Release:	5
 License:	GPL v3+
 Group:		X11/Applications/Graphics
 Source0:	http://download.berlios.de/mirageiv/%{name}-%{version}.tar.bz2
